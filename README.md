@@ -1,12 +1,42 @@
+# multiclass_rle
+
 ## How to use multiclass_rle
 
-RLE encoding for multiclass 2D arrays (e.g. image segmentation targets).
+[Run-length Encoding](https://en.wikipedia.org/wiki/Run-length_encoding) (RLE) for multiclass 2D mask arrays (e.g. image segmentation targets).  
 
-The project setup is documented in [project_setup.md](project_setup.md). Feel free to remove this document (and/or the link to this document) if you don't need it.
+It is built as an extension of the COCO format, by simply adding a 'values' key to the dictionnary used.  
+
+That way, a 2D array such as:
+
+```python
+array = np.array([
+    [0, 0, 1, 1, 0],
+    [3, 0, 1, 1, 0],
+    [3, 3, 1, 1, 0],
+    [3, 3, 0, 0, 0]
+])
+```
+
+… can be encoded as:
+
+```python
+rle = {
+    'size': (4, 5),
+    'values': (0, 3, 0, 3, 1, 0, 1, 0)
+    'counts': (1, 3, 2, 2, 3, 1, 3, 5)
+}
+```
+
+(Note that, like COCO format, the same "rows first" convention is used.)
+
+It is not visible on the example above since the array is very small, but RLE allows to drastically reduce the memory needed to store a mask array.  
+For performance purpose, this library uses as much `numpy` as possible . The comparison with other solutions found on the forum can be found in this [benchmark](benchmark.ipynb).  
 
 ## Installation
 
-To install multiclass_rle from GitHub repository, do:
+You can freely copy/paste the code from multiclass_rle/multiclass_rle.py
+
+Else, if you want to install multiclass_rle from GitHub repository, do:
 
 ```console
 git clone https://github.com/FrankwaP/multiclass-rle.git
@@ -17,6 +47,47 @@ python -m pip install .
 
 ## Documentation
 
-Include a link to your project's full documentation here.
+### Encoding
 
+When you're preparing your data and want to store them in a memory-efficient way, use array_to_multi_class_rle:  
 
+```python
+from multiclass_rle import array_to_multi_class_rle
+
+array = np.array([
+    [0,0,1,1,0],
+    [3,0,1,1,0],
+    [3,3,1,1,0],
+    [3,3,0,0,0]
+])
+
+rle = array_to_multi_class_rle(array)
+```
+
+Note that the RLE object are built on Python's tuple and dictionary objects, so they are easily storable in a json of pickle object for example.
+
+### Decoding
+
+To decode them so you can work with the numpy array, use `multi_class_rle_to_array`.  
+Here's how it looks like when one wants to train a multiclass semantic segmentation model:
+
+```python
+
+from multiclass_rle import multi_class_rle_to_array
+
+# ...
+
+dataset = load_dataset(path, ...)
+batch_generator = BatchGenerator(dataset, ...)
+
+for epoch in range(N_epoch):
+    # ...
+    for batch in batch_generator:
+        # ...
+        for image, mask in batch:  # 
+            bin_mask = multi_class_rle_to_array(mask)
+            # ...
+        # ...
+    # ...
+# ...
+```
