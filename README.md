@@ -52,6 +52,8 @@ python -m pip install .
 When you're preparing your data and want to store them in a memory-efficient way, use array_to_multi_class_rle:  
 
 ```python
+import numpy as np
+
 from multiclass_rle import array_to_multi_class_rle
 
 array = np.array([
@@ -62,6 +64,7 @@ array = np.array([
 ])
 
 rle = array_to_multi_class_rle(array)
+print(rle)
 ```
 
 Note that the RLE object are built on Python's tuple and dictionary objects, so they are easily storable in a json of pickle object for example.
@@ -69,6 +72,20 @@ Note that the RLE object are built on Python's tuple and dictionary objects, so 
 ### Decoding
 
 To decode them so you can work with the numpy array, use `multi_class_rle_to_array`.  
+
+```python
+from multiclass_rle import multi_class_rle_to_array
+
+rle = {
+    'size': (4, 5),
+    'values': (0, 3, 0, 3, 1, 0, 1, 0),
+    'counts': (1, 3, 2, 2, 3, 1, 3, 5)
+}
+
+arr = multi_class_rle_to_array(rle)
+print(arr)
+```
+
 Here's how it looks like when one wants to train a multiclass semantic segmentation model:
 
 ```python
