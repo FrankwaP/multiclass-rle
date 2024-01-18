@@ -108,3 +108,7 @@ for epoch in range(N_epoch):
     # ...
 # ...
 ```
+
+## Repo structure
+
+This repo has been generated using [cookiecutter](https://www.cookiecutter.io/) with the [Minimal Python template](https://github.com/florian-huber/minimal-python-template).
