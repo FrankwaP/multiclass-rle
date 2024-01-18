@@ -30,7 +30,7 @@ rle = {
 (Note that, like COCO format, it uses the same "rows first", or Fortran, convention.)
 
 It is not visible on the example above since the array is very small, but RLE allows to drastically reduce the memory needed to store a mask array.  
-For performance purpose, this library uses as much `numpy` as possible . The comparison with other solutions found on the forum can be found in this [benchmark](benchmark.ipynb).  
+For performance purpose, this library uses as much `numpy` as possible. And it pays off, as shown in [benchmark](benchmark.ipynb)!  
 
 ## Installation
 
