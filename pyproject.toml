@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = []
+dependencies = ["numpy"]
 description = "RLE encoding for multiclass 2D arrays (e.g. image segmentation targets)."
 license = {file = "LICENSE"}
 name = "multiclass_rle"
