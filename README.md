@@ -30,8 +30,17 @@ rle = {
 (Note that, like COCO format, it uses the same "rows first", or Fortran, convention.)
 
 It is not visible on the example above since the array is very small, but RLE allows to drastically reduce the memory needed to store a mask array.  
-For performance purpose, this library uses as much `numpy` as possible. And it pays off, as shown in [benchmark](benchmark.ipynb)!  
+For performance purpose, this library uses as much `numpy` as possible. And it pays off, as concluded in the [benchmark](benchmark.ipynb):  
 
+> So… on my home computer…  
+>
+> 1. multi-class encoding is 5 times slower than the fastest binary encoding (pycocotools)  
+>    BUT if you have N classes and use binary encoding, then you will decode N times: so for N>5, our approach will be faster.
+> 2. multi-class decoding is 2 times faster than the fastest binary encoding (pycocotools)  
+>   AND decoding is the most critical part is the decoding, since it is done in the training loop (one decoding for each epochs); while the encoding is one only once during the dataset praparation.  
+>
+> So these are quite good results we've got here!
+  
 ## Installation
 
 You can freely copy/paste the code from multiclass_rle/multiclass_rle.py
